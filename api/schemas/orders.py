@@ -1,28 +1,31 @@
-# api/schemas/orders.py
-from datetime import datetime
-from pydantic import BaseModel
-from typing import Optional
+from __future__ import annotations
 
+from datetime import datetime
+from typing import Optional
+from pydantic import BaseModel, Field
+
+
+# What the client can send (and what we re-use for responses)
 class OrderBase(BaseModel):
-    customer_id: Optional[int] = None
-    status: Optional[str] = "pending"
-    total_amount: Optional[float] = 0.0
+    status: str = Field(default="pending")           # pending / preparing / ready / delivered
+    customer_id: Optional[int] = None                # optional FK
+    total_price: float = 0.0                         # float on the API to avoid Decimal JSON issues
+
 
 class OrderCreate(OrderBase):
     pass
 
-class OrderUpdate(BaseModel):
-    customer_id: Optional[int] = None
-    status: Optional[str] = None
-    total_amount: Optional[float] = None
 
-class OrderRead(OrderBase):
+class OrderUpdate(BaseModel):
+    status: Optional[str] = None
+    customer_id: Optional[int] = None
+    total_price: Optional[float] = None
+
+
+class Order(OrderBase):
     id: int
-    created_at: Optional[datetime] = None
+    tracking_no: str
+    ordered_at: datetime
 
     class Config:
-        from_attributes = True  # FastAPI v1+ / Pydantic v2 friendly
-
-# 👇 This one line satisfies router's `response_model=schema.Order`
-class Order(OrderRead):
-    pass
+        from_attributes = True   # allow reading from SQLAlchemy objects
