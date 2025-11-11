@@ -1,14 +1,9 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, DECIMAL, DATETIME
-from sqlalchemy.orm import relationship
-from datetime import datetime
+from sqlalchemy import Column, Integer, String, Numeric
 from ..dependencies.database import Base
-
 
 class Resource(Base):
     __tablename__ = "resources"
-
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    item = Column(String(100), unique=True, nullable=False)
-    amount = Column(Integer, index=True, nullable=False, server_default='0.0')
-
-    recipes = relationship("Recipe", back_populates="resource")
+    id = Column(Integer, primary_key=True)
+    name = Column(String(150), unique=True, nullable=False)
+    unit = Column(String(30), nullable=False)     # 'g','ml','pcs'
+    on_hand = Column(Numeric(12,3), nullable=False, default=0)

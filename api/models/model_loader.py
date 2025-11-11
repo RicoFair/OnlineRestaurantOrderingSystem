@@ -1,11 +1,24 @@
-from . import orders, order_details, recipes, sandwiches, resources
+# Ensure every model module is imported so SQLAlchemy registers all table classes
+from . import (
+    customers,
+    categories,
+    menu_items,
+    resources,
+    recipes,
+    orders,
+    order_details,
+    payments,
+    promotions,
+    reviews,
+)
 
-from ..dependencies.database import engine
+# Import the shared Base + engine used across all models
+from ..dependencies.database import Base, engine
 
 
-def index():
-    orders.Base.metadata.create_all(engine)
-    order_details.Base.metadata.create_all(engine)
-    recipes.Base.metadata.create_all(engine)
-    sandwiches.Base.metadata.create_all(engine)
-    resources.Base.metadata.create_all(engine)
+def create_tables() -> None:
+    """
+    Create all tables defined on the shared Base.
+    This works because importing the modules above registers their table classes.
+    """
+    Base.metadata.create_all(bind=engine)

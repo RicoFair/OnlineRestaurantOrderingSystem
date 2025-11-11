@@ -1,24 +1,13 @@
-from datetime import datetime
-from typing import Optional
-from pydantic import BaseModel
+from decimal import Decimal
+from .common import ORMBase
 
+class ResourceCreate(ORMBase):
+    name: str
+    unit: str
+    on_hand: Decimal = Decimal("0")
 
-class ResourceBase(BaseModel):
-    item: str
-    amount: int
-
-
-class ResourceCreate(ResourceBase):
-    pass
-
-
-class ResourceUpdate(BaseModel):
-    item: Optional[str] = None
-    amount: Optional[int] = None
-
-
-class Resource(ResourceBase):
+class ResourceOut(ORMBase):
     id: int
-
-    class ConfigDict:
-        from_attributes = True
+    name: str
+    unit: str
+    on_hand: Decimal

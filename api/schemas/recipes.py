@@ -1,27 +1,13 @@
-from datetime import datetime
-from typing import Optional
-from pydantic import BaseModel
-from .resources import Resource
-from .sandwiches import Sandwich
+from decimal import Decimal
+from .common import ORMBase
 
-
-class RecipeBase(BaseModel):
-    amount: int
-
-
-class RecipeCreate(RecipeBase):
-    sandwich_id: int
+class RecipeCreate(ORMBase):
+    menu_item_id: int
     resource_id: int
+    qty: Decimal
 
-class RecipeUpdate(BaseModel):
-    sandwich_id: Optional[int] = None
-    resource_id: Optional[int] = None
-    amount: Optional[int] = None
-
-class Recipe(RecipeBase):
+class RecipeOut(ORMBase):
     id: int
-    sandwich: Sandwich = None
-    resource: Resource = None
-
-    class ConfigDict:
-        from_attributes = True
+    menu_item_id: int
+    resource_id: int
+    qty: Decimal

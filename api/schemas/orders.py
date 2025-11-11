@@ -1,28 +1,28 @@
+# api/schemas/orders.py
 from datetime import datetime
-from typing import Optional
 from pydantic import BaseModel
-from .order_details import OrderDetail
-
-
+from typing import Optional
 
 class OrderBase(BaseModel):
-    customer_name: str
-    description: Optional[str] = None
-
+    customer_id: Optional[int] = None
+    status: Optional[str] = "pending"
+    total_amount: Optional[float] = 0.0
 
 class OrderCreate(OrderBase):
     pass
 
-
 class OrderUpdate(BaseModel):
-    customer_name: Optional[str] = None
-    description: Optional[str] = None
+    customer_id: Optional[int] = None
+    status: Optional[str] = None
+    total_amount: Optional[float] = None
 
-
-class Order(OrderBase):
+class OrderRead(OrderBase):
     id: int
-    order_date: Optional[datetime] = None
-    order_details: list[OrderDetail] = None
+    created_at: Optional[datetime] = None
 
-    class ConfigDict:
-        from_attributes = True
+    class Config:
+        from_attributes = True  # FastAPI v1+ / Pydantic v2 friendly
+
+# 👇 This one line satisfies router's `response_model=schema.Order`
+class Order(OrderRead):
+    pass
