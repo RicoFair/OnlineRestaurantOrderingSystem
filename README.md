@@ -17,3 +17,8 @@ venv\Scripts\activate
 
 # macOS / Linux
 source venv/bin/activate
+
+
+## Part 2 Update Notes
+- Product Backlog: NO UPDATE  
+- User Stories: NO UPDATE
